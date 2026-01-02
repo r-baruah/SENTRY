@@ -331,13 +331,19 @@ export async function runExploitTest(
             durationMs
         };
 
-    } catch (error) {
+    } catch (error: any) {
         const durationMs = Date.now() - startTime;
-        const errorMessage = error instanceof Error ? error.message : String(error);
+        
+        // Capture detailed output from the error object if available
+        // child_process.exec throws an error that contains stdout/stderr
+        const detailedError = (error.stdout || '') + '\n' + (error.stderr || '');
+        const errorMessage = detailedError.trim().length > 0 
+            ? detailedError 
+            : (error instanceof Error ? error.message : String(error));
 
         // Check if it's a compilation error or test failure
         let verdict: Verdict = 'INCONCLUSIVE';
-        if (errorMessage.toLowerCase().includes('compil')) {
+        if (errorMessage.toLowerCase().includes('compil') || errorMessage.toLowerCase().includes('error')) {
             verdict = 'COMPILATION_FAILED';
         }
 

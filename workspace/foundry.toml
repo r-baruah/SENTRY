@@ -20,7 +20,7 @@ evm_version = "paris"
 
 # Remappings for mock library
 remappings = [
-    "mocks/=../contracts/mocks/"
+    "mocks/=src/mocks/"
 ]
 
 # Suppress warnings for cleaner output

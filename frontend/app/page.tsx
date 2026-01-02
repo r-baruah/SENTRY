@@ -26,7 +26,7 @@ contract Vault is Ownable {
 export default function Home() {
   const [code, setCode] = useState(DEFAULT_CODE);
   const [logs, setLogs] = useState<string[]>([]);
-  const [status, setStatus] = useState<'IDLE' | 'RUNNING' | 'CRITICAL' | 'SECURE' | 'ERROR'>('IDLE');
+  const [status, setStatus] = useState<'IDLE' | 'RUNNING' | 'CRITICAL' | 'SECURE' | 'ERROR' | 'UNKNOWN'>('IDLE');
 
   const handleAudit = async () => {
     if (status === 'RUNNING') return;

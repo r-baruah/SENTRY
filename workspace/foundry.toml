@@ -20,7 +20,8 @@ evm_version = "paris"
 
 # Remappings for mock library
 remappings = [
-    "mocks/=src/mocks/"
+    "mocks/=src/mocks/",
+    "forge-std/=lib/forge-std/src/"
 ]
 
 # Suppress warnings for cleaner output

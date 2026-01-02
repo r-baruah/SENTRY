@@ -36,7 +36,12 @@ RUN npm install
 # 4. Copy Source Code
 COPY . .
 
-# 5. Build Backend
+# 5. Install forge-std in workspace (required for Step D tests)
+RUN mkdir -p /app/workspace/lib && \
+    rm -rf /app/workspace/lib/forge-std && \
+    git clone --depth 1 https://github.com/foundry-rs/forge-std /app/workspace/lib/forge-std
+
+# 6. Build Backend
 WORKDIR /app/backend
 RUN npm run build
 

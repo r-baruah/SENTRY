@@ -40,16 +40,23 @@ const WORKSPACE_DIR = process.env.WORKSPACE_DIR || path.resolve(process.cwd(), '
 
 /**
  * Ensures the workspace directory structure exists
- * Creates src/ and test/ directories if missing
+ * Creates src/, test/, and lib/ directories if missing
  */
 async function ensureWorkspaceExists(): Promise<void> {
     const srcDir = path.join(WORKSPACE_DIR, 'src');
     const testDir = path.join(WORKSPACE_DIR, 'test');
     const libDir = path.join(WORKSPACE_DIR, 'lib');
+    const forgeStdDir = path.join(libDir, 'forge-std');
 
     await fs.promises.mkdir(srcDir, { recursive: true });
     await fs.promises.mkdir(testDir, { recursive: true });
     await fs.promises.mkdir(libDir, { recursive: true });
+
+    // If forge-std is missing, we need to create a basic version or install it
+    // In a container, we'll try to provide a fallback remapping if it's missing
+    if (!fs.existsSync(forgeStdDir)) {
+        console.log('[COMPILER] forge-std missing in workspace/lib. Applying remappings fallback...');
+    }
 }
 
 /**

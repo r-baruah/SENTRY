@@ -31,7 +31,7 @@ COPY backend/package.json ./backend/
 COPY frontend/package.json ./frontend/
 
 # Install dependencies (from root to handle workspaces)
-RUN npm ci
+RUN npm install
 
 # 4. Copy Source Code
 COPY . .

@@ -12,7 +12,7 @@ pragma solidity ^0.8.0;
 // ═══════════════════════════════════════════════════════════════════════════
 
 import "forge-std/Test.sol";
-import "src/Vault.sol"; // User code is placed in workspace/src as Vault.sol
+import "../src/Vault.sol"; // User code is placed in workspace/src as Vault.sol
 
 /**
  * @title AttackerTest

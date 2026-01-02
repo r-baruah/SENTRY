@@ -1,0 +1,30 @@
+# Git
+.git
+.gitignore
+
+# Environment variables
+.env
+**/.env
+.env.*
+!.env.example
+
+# Node
+node_modules
+npm-debug.log
+
+# Build artifacts
+dist
+.next
+out
+build
+coverage
+
+# Foundry
+workspace/out
+workspace/cache
+workspace/broadcast
+contracts/lib
+
+# Misc
+.DS_Store
+Thumbs.db

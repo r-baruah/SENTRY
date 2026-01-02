@@ -59,7 +59,13 @@ interface ProviderConfig {
  * Gets the provider configuration from environment variables
  */
 function getProviderConfig(): ProviderConfig {
-    const provider = (process.env.AI_PROVIDER || 'openrouter') as AIProvider;
+    const rawProvider = process.env.AI_PROVIDER;
+    console.log(`[SENTRY CONFIG] AI_PROVIDER env var is: '${rawProvider}'`);
+
+    // Default to openrouter if not explicitly set to something else valid
+    const provider = (rawProvider && ['openai', 'gemini'].includes(rawProvider))
+        ? (rawProvider as AIProvider)
+        : 'openrouter';
 
     switch (provider) {
         case 'openrouter': {

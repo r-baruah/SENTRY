@@ -14,7 +14,7 @@
 
 AI Auditors hallucinate. **SENTRY proves.**
 
-We bridge the gap between Stochastic AI (ChatGPT) and Deterministic Execution (Foundry). Moving from "Probability" to "Cryptographic Truth".
+We bridge the gap between **Stochastic AI (DeepSeek/LLMs)** and **Deterministic Execution (Foundry)**. Moving from "Probability" to "Cryptographic Truth".
 
 | Feature | Standard AI Auditor | SENTRY |
 | :--- | :--- | :--- |

@@ -2,19 +2,14 @@
 # https://render.com/docs/blueprint-spec
 
 services:
-  # Backend API Service
+  # Backend API Service (Docker)
   - type: web
     name: sentry-backend
-    runtime: node
+    runtime: docker
     region: oregon
     plan: free
-    buildCommand: |
-      npm install
-      cd backend && npm run build
-      # Install Foundry
-      curl -L https://foundry.paradigm.xyz | bash
-      ~/.foundry/bin/foundryup
-    startCommand: cd backend && node dist/index.js
+    dockerContext: .
+    dockerfilePath: Dockerfile
     envVars:
       - key: NODE_ENV
         value: production
@@ -23,7 +18,7 @@ services:
       - key: AI_PROVIDER
         value: openrouter
       - key: OPENROUTER_API_KEY
-        sync: false  # Set manually in dashboard
+        sync: false
       - key: OPENROUTER_MODEL
         value: moonshotai/kimi-k2,deepseek/deepseek-v3.2-speciale
     healthCheckPath: /health

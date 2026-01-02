@@ -283,6 +283,47 @@ export async function runExploitTest(
             }
         }
 
+        // ═══════════════════════════════════════════════════════════════════
+        // Step 8: Diagnostics & Execution
+        // ═══════════════════════════════════════════════════════════════════
+
+        // DIAGNOSTIC: Check Forge Version
+        try {
+            const { stdout } = await execAsync('forge --version', { cwd: WORKSPACE_ROOT });
+            console.log('[VERIFIER] Forge Version:', stdout.trim());
+        } catch (e: any) {
+            console.error('[VERIFIER] Forge not found/executable:', e.message);
+        }
+
+        // DIAGNOSTIC: Check File Structure
+        try {
+            const files = fs.readdirSync(WORKSPACE_ROOT);
+            console.log('[VERIFIER] Workspace Root:', files.join(', '));
+            if (fs.existsSync(path.join(WORKSPACE_ROOT, 'lib/forge-std'))) {
+                console.log('[VERIFIER] forge-std exists');
+            } else {
+                console.error('[VERIFIER] forge-std MISSING');
+            }
+        } catch (e) {
+            console.error('[VERIFIER] FS Error:', e);
+        }
+
+        // Explicit Build Step to catch compilation errors separately
+        try {
+            await execAsync('forge build', { cwd: WORKSPACE_ROOT, timeout: 30000 });
+            console.log('[VERIFIER] Build Successful');
+        } catch (e: any) {
+            const buildError = (e.stdout || '') + '\n' + (e.stderr || '');
+            console.error('[VERIFIER] Build Failed:', buildError);
+            return {
+                verdict: 'COMPILATION_FAILED',
+                targetFunction: hypothesis.target,
+                exploitSucceeded: false,
+                testOutput: `Build Failed:\n${buildError}`,
+                durationMs: Date.now() - startTime
+            };
+        }
+
         const { stdout, stderr } = await execAsync(
             command,
             {

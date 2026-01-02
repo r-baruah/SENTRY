@@ -7,30 +7,46 @@ interface TerminalProps {
 }
 
 export default function Terminal({ logs }: TerminalProps) {
-    const bottomRef = useRef<HTMLDivElement>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+        if (containerRef.current) {
+            containerRef.current.scrollTop = containerRef.current.scrollHeight;
+        }
     }, [logs]);
 
+    const getLogStyle = (log: string) => {
+        if (log.includes('[PASS]')) {
+            return 'text-green-400 bg-green-900/30 px-2 py-1 rounded-sm block font-bold';
+        }
+        if (log.toLowerCase().includes('error') || log.includes('CRITICAL')) {
+            return 'text-red-400 font-bold';
+        }
+        return 'text-zinc-400';
+    };
+
     return (
-        <div className="h-full w-full bg-black border-l border-zinc-800 p-4 font-mono text-xs md:text-sm overflow-y-auto custom-scrollbar">
-            <div className="sticky top-0 bg-black/80 backdrop-blur-sm mb-4 text-zinc-500 uppercase tracking-widest text-[10px] border-b border-zinc-800 pb-2 z-10 flex justify-between">
+        <div
+            ref={containerRef}
+            className="h-full w-full bg-black border-l border-zinc-800 p-6 font-mono text-lg md:text-xl overflow-y-auto custom-scrollbar"
+        >
+            <div className="sticky top-0 bg-black/80 backdrop-blur-sm mb-6 text-zinc-500 uppercase tracking-widest text-xs border-b border-zinc-800 pb-2 z-10 flex justify-between">
                 <span>Mission Control // Live Feed</span>
                 <span className="text-green-500 animate-pulse">● ONLINE</span>
             </div>
-            <div className="flex flex-col space-y-1 font-mono">
+            <div className="flex flex-col space-y-2 font-mono">
                 {logs.length === 0 && (
                     <div className="text-zinc-700 italic">Waiting for pipeline initiation...</div>
                 )}
                 {logs.map((log, i) => (
-                    <div key={i} className="text-green-500 break-words whitespace-pre-wrap leading-tight">
-                        <span className="opacity-30 mr-2 select-none">{(i + 1).toString().padStart(3, '0')}</span>
+                    <div key={i} className={`break-words whitespace-pre-wrap leading-relaxed ${getLogStyle(log)}`}>
+                        <span className="opacity-30 mr-4 select-none text-sm inline-block w-8">
+                            {(i + 1).toString().padStart(3, '0')}
+                        </span>
                         {log}
                     </div>
                 ))}
             </div>
-            <div ref={bottomRef} />
         </div>
     );
 }

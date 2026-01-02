@@ -73,20 +73,20 @@ export default function Home() {
       {/* Left Panel: Editor */}
       <div className="w-full md:w-1/2 h-1/2 md:h-full flex flex-col border-r border-zinc-800 relative z-10 bg-black">
         <CodeEditor code={code} onChange={setCode} disabled={status === 'RUNNING'} />
-        <div className="bg-black p-4 border-t border-zinc-800">
+        <div className="bg-black p-6 border-t border-zinc-800">
           <button
             onClick={handleAudit}
             disabled={status === 'RUNNING'}
             className={`
-                            w-full font-mono font-bold text-sm py-4 uppercase tracking-[0.2em] transition-all duration-300
-                            border 
+                            w-full font-mono font-bold text-lg py-5 uppercase tracking-[0.3em] transition-all duration-300
+                            border-2 
                             disabled:opacity-50 disabled:cursor-not-allowed
                             ${status === 'RUNNING'
                 ? 'bg-zinc-900 border-zinc-800 text-zinc-500 animate-pulse'
-                : 'bg-black text-green-500 border-green-900 hover:border-green-400 hover:text-green-400 hover:shadow-[0_0_20px_rgba(74,222,128,0.2)]'}
+                : 'bg-black text-green-500 border-green-700 hover:border-green-400 hover:text-green-400 hover:shadow-[0_0_30px_rgba(74,222,128,0.3)]'}
                         `}
           >
-            {status === 'RUNNING' ? '/// PROCESSING ///' : '[ INITIATE SENTRY AUDIT ]'}
+            {status === 'RUNNING' ? '/// PROCESSING...' : '[ INITIATE AUDIT ]'}
           </button>
         </div>
       </div>

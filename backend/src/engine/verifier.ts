@@ -271,7 +271,7 @@ export async function runExploitTest(
                 if (wslWorks) {
                     command = 'wsl forge test --match-path test/Attacker.t.sol -vvv';
                 } else {
-                    // Try ~/.foundry/bin/forge
+                    // Try ~/.foundry/bin/forge via WSL (common install path)
                     const wslPathWorks = await new Promise<boolean>(res => {
                         exec('wsl ~/.foundry/bin/forge --version', (err) => res(!err));
                     });
@@ -384,14 +384,26 @@ export async function runExploitTest(
 
         // Check if it's a compilation error or test failure
         let verdict: Verdict = 'INCONCLUSIVE';
-        if (errorMessage.toLowerCase().includes('compil') || errorMessage.toLowerCase().includes('error')) {
+        
+        // If we see explicit test markers, it is NOT a compilation failure
+        if (errorMessage.includes('[FAIL') || errorMessage.includes('[PASS')) {
+             // If we have a fail, we check if it was our exploit assertion
+             if (errorMessage.includes('EXPLOIT SUCCEEDED')) {
+                 verdict = 'VULNERABILITY_CONFIRMED';
+             } else {
+                 // Regular test failure means the exploit call reverted (Access Control Worked!)
+                 verdict = 'FALSE_POSITIVE';
+             }
+        } 
+        // Only if no test ran do we check for generic errors
+        else if (errorMessage.toLowerCase().includes('compil') || errorMessage.toLowerCase().includes('error:')) {
             verdict = 'COMPILATION_FAILED';
         }
 
         return {
             verdict,
             targetFunction: hypothesis.target,
-            exploitSucceeded: false,
+            exploitSucceeded: false, // We'll rely on verdict logic above
             testOutput: errorMessage,
             durationMs
         };

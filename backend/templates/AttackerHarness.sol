@@ -34,6 +34,12 @@ contract AttackerTest is Test {
         target = new Vault();
         attacker = address(this);
     }
+
+    /**
+     * @notice Allow contract to receive ETH
+     * @dev Required for exploits that withdraw funds to msg.sender
+     */
+    receive() external payable {}
     
     /**
      * @notice AXIOM Verification Test

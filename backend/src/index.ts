@@ -27,7 +27,7 @@ import {
 // CONFIGURATION
 // ─────────────────────────────────────────────────────────────────────────────
 
-const WORKSPACE_ROOT = path.resolve(__dirname, '..', 'workspace');
+const WORKSPACE_ROOT = process.env.WORKSPACE_DIR || path.resolve(process.cwd(), '../workspace');
 const WORKSPACE_SRC = path.join(WORKSPACE_ROOT, 'src');
 const PORT = 3005;
 

@@ -27,7 +27,10 @@ import { CompilerResult, CompilerOptions } from '../types';
 const DEFAULT_TIMEOUT_MS = 30000;
 
 /** Path to the workspace directory (Foundry project root) */
-const WORKSPACE_DIR = path.resolve(__dirname, '../../../..', 'workspace');
+/** Path to the workspace directory (Foundry project root) */
+// In dev: CWD is axiom/backend -> workspace is ../workspace
+// In prod (Docker): CWD is /app/backend -> workspace is ../workspace
+const WORKSPACE_DIR = process.env.WORKSPACE_DIR || path.resolve(process.cwd(), '../workspace');
 
 // Contract files are written dynamically by writeContractToWorkspace()
 

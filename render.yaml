@@ -1,0 +1,30 @@
+# SENTRY - Render Deployment Configuration
+# https://render.com/docs/blueprint-spec
+
+services:
+  # Backend API Service
+  - type: web
+    name: sentry-backend
+    runtime: node
+    region: oregon
+    plan: free
+    buildCommand: |
+      npm install
+      cd backend && npm run build
+      # Install Foundry
+      curl -L https://foundry.paradigm.xyz | bash
+      ~/.foundry/bin/foundryup
+    startCommand: cd backend && node dist/index.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3005
+      - key: AI_PROVIDER
+        value: openrouter
+      - key: OPENROUTER_API_KEY
+        sync: false  # Set manually in dashboard
+      - key: OPENROUTER_MODEL
+        value: moonshotai/kimi-k2,deepseek/deepseek-v3.2-speciale
+    healthCheckPath: /health
+    autoDeploy: true

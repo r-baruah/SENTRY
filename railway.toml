@@ -1,0 +1,16 @@
+# SENTRY - Railway Deployment Configuration
+# This file configures how Railway builds and runs the application
+
+[build]
+builder = "nixpacks"
+buildCommand = "npm install && cd backend && npm run build"
+
+[deploy]
+startCommand = "cd backend && npm run start"
+healthcheckPath = "/health"
+healthcheckTimeout = 300
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 3
+
+[[services]]
+name = "sentry-backend"

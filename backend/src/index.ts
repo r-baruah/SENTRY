@@ -237,6 +237,16 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Health check endpoint for Railway/Render
+app.get('/health', (_req, res) => {
+    res.json({
+        status: 'healthy',
+        service: 'sentry-backend',
+        version: '1.0.0',
+        timestamp: new Date().toISOString()
+    });
+});
+
 app.post('/audit', async (req, res) => {
     const { code } = req.body;
 
@@ -254,6 +264,11 @@ app.post('/audit', async (req, res) => {
     }
 });
 
-app.listen(PORT, () => {
-    console.log(`SENTRY Server running on http://localhost:${PORT}`);
+// Use Railway/Render provided PORT or default to 3005
+const SERVER_PORT = process.env.PORT || PORT;
+
+app.listen(SERVER_PORT, () => {
+    console.log(`🛡️ SENTRY Server running on http://localhost:${SERVER_PORT}`);
+    console.log(`   Health: http://localhost:${SERVER_PORT}/health`);
+    console.log(`   Audit:  POST http://localhost:${SERVER_PORT}/audit`);
 });

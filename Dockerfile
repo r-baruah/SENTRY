@@ -23,6 +23,10 @@ WORKDIR /app
 
 # Copy dependency files first (for caching)
 COPY package.json package-lock.json ./
+
+# Create directories to avoid copy errors
+RUN mkdir -p backend frontend
+
 COPY backend/package.json ./backend/
 COPY frontend/package.json ./frontend/
 

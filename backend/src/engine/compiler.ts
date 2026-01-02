@@ -65,6 +65,40 @@ async function writeContractToWorkspace(
 }
 
 /**
+ * Copies mock contracts (like Ownable) to the workspace
+ * This enables the sanitizer's remapped imports to work
+ */
+async function copyMocksToWorkspace(): Promise<void> {
+    // SENTRY/contracts/mocks -> workspace/src/mocks
+    const mocksSourceDir = path.resolve(WORKSPACE_DIR, '../contracts/mocks');
+    const mocksDestDir = path.join(WORKSPACE_DIR, 'src/mocks');
+
+    try {
+        await fs.promises.mkdir(mocksDestDir, { recursive: true });
+
+        // Check if source exists
+        try {
+            await fs.promises.access(mocksSourceDir);
+        } catch {
+            console.warn(`[COMPILER] Mocks directory not found at ${mocksSourceDir}. Skipping mock copy.`);
+            return;
+        }
+
+        const files = await fs.promises.readdir(mocksSourceDir);
+        for (const file of files) {
+            if (file.endsWith('.sol')) {
+                await fs.promises.copyFile(
+                    path.join(mocksSourceDir, file),
+                    path.join(mocksDestDir, file)
+                );
+            }
+        }
+    } catch (error) {
+        console.warn('[COMPILER] Failed to copy mocks:', error);
+    }
+}
+
+/**
  * Cleans the workspace by removing compiled artifacts
  * Preserves the directory structure and foundry.toml
  */
@@ -108,7 +142,10 @@ export async function compileCode(
             await cleanWorkspace();
         }
 
-        // Step 3: Write code to workspace
+        // Step 3: Copy mock contracts
+        await copyMocksToWorkspace();
+
+        // Step 4: Write code to workspace
         const contractPath = await writeContractToWorkspace(sanitizedCode);
         console.log(`[COMPILER] Contract written to: ${contractPath}`);
 

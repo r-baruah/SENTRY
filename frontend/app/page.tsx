@@ -33,10 +33,13 @@ export default function Home() {
 
     setStatus('RUNNING');
     // Clear previous logs and add initialization status
-    setLogs(['> SYSTEM INIT', '> ESTABLISHING UPLINK TO AXIOM ENGINE...', '> UPLAODING SOURCE CODE...']);
+    setLogs(['> SYSTEM INIT', '> ESTABLISHING UPLINK TO SENTRY ENGINE...', '> UPLOADING SOURCE CODE...']);
 
     try {
-      const response = await fetch('http://localhost:3005/audit', {
+      // Use env var or default to local (useful for dev)
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3005';
+
+      const response = await fetch(`${apiUrl}/audit`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ code }),
@@ -54,11 +57,11 @@ export default function Home() {
       // Filter empty lines mostly
       const filteredLogs = logLines.filter((l: string) => l.trim() !== '');
 
-      setLogs(prev => [...filteredLogs]);
+      setLogs(filteredLogs); // Reset logs completely with new response
       setStatus(data.verdict || 'UNKNOWN');
 
     } catch (error: any) {
-      setLogs(prev => [...prev, '', '❌ CRITICAL SYSTEM FAILURE', error.message]);
+      setLogs((prev) => [...prev, '', '❌ CRITICAL SYSTEM FAILURE', error.message]);
       setStatus('ERROR');
     }
   };
@@ -83,7 +86,7 @@ export default function Home() {
                 : 'bg-black text-green-500 border-green-900 hover:border-green-400 hover:text-green-400 hover:shadow-[0_0_20px_rgba(74,222,128,0.2)]'}
                         `}
           >
-            {status === 'RUNNING' ? '/// PROCESSING ///' : '[ INITIATE AXIOM AUDIT ]'}
+            {status === 'RUNNING' ? '/// PROCESSING ///' : '[ INITIATE SENTRY AUDIT ]'}
           </button>
         </div>
       </div>

@@ -1,0 +1,17 @@
+{
+  "name": "sentry-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev -w @sentry/backend\" \"npm run dev -w frontend\" -c \"blue,magenta\" --names \"BACKEND,FRONTEND\""
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.18",
+    "concurrently": "^9.1.2",
+    "tailwindcss": "^4.1.18"
+  }
+}

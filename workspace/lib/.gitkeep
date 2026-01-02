@@ -1,0 +1,2 @@
+# This directory can contain symlinks to the mock library
+# The foundry.toml remappings handle this automatically

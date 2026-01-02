@@ -1,0 +1,56 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# AXIOM - WORKSPACE FOUNDRY CONFIGURATION
+# The Deterministic Verification Engine
+# ═══════════════════════════════════════════════════════════════════════════
+
+[profile.default]
+# Source and output directories
+src = "src"
+out = "out"
+libs = ["lib"]
+test = "test"
+
+# Compiler settings
+solc = "0.8.20"
+optimizer = true
+optimizer_runs = 200
+
+# EVM version
+evm_version = "paris"
+
+# Remappings for mock library
+remappings = [
+    "mocks/=../contracts/mocks/"
+]
+
+# Suppress warnings for cleaner output
+ignored_error_codes = [1878]
+
+# Gas settings for testing
+gas_limit = 9223372036854775807
+gas_price = 0
+
+# Verbosity for forge test
+verbosity = 2
+
+# Cache settings
+cache = true
+cache_path = "cache"
+
+# Formatting (optional, for consistency)
+[fmt]
+line_length = 100
+tab_width = 4
+bracket_spacing = true
+
+# Testing configuration
+[fuzz]
+runs = 256
+max_test_rejects = 65536
+seed = "0x3e8"
+
+# Invariant testing
+[invariant]
+runs = 256
+depth = 15
+fail_on_revert = false

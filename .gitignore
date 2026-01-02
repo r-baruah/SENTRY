@@ -1,0 +1,35 @@
+# SENTRY Git Ignore
+
+# Dependencies
+node_modules/
+
+# Build output
+backend/dist/
+frontend/.next/
+frontend/out/
+
+# Foundry workspace (generated at runtime)
+workspace/out/
+workspace/cache/
+workspace/src/*.sol
+workspace/test/*.sol
+
+# Environment files (contains API keys!)
+.env
+*.env.local
+
+# IDE
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Test files
+*.test.ts
+src/test-*.ts
